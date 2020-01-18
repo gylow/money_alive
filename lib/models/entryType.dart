@@ -1,4 +1,0 @@
-enum EntryType {
-  negative,
-  positive,
-}

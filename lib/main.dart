@@ -84,8 +84,8 @@ class _MyHomePageStage extends State<MyHomePage> {
       title: txTitle,
       amount: txAmount,
       date: chosenDate ?? _today,
-      inputAccount: _accounts[0],
-      outputAccount: _accounts[1],
+      input: _accounts[0],
+      output: _accounts[1],
     );
 
     setState(() {
