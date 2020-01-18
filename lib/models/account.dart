@@ -1,39 +1,43 @@
+import 'dart:collection';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 
-import './dailyBalance.dart';
+//import './dailyBalance.dart';
 
 class Account {
   final String id;
   final String name;
-  List<DailyBalance> balanceList = [];
+  var balanceMap = new SplayTreeMap<DateTime, double>();
+  //List<DailyBalance> balanceList = [];
 
   Account({
     @required this.id,
     @required this.name,
   });
 
-  DailyBalance addEntryIntoAccount(double amount, DateTime date) {
-    DailyBalance balance = getDailyBalance(date);
+  void addEntryIntoAccount(double amount, DateTime date) {
+    //DailyBalance balance = getDailyBalance(date);
+
+    var balanceBefore = balanceMap[balanceMap?.lastKeyBefore(date)] ?? 0.0;
+    balanceMap.putIfAbsent(date, () => balanceBefore);
 
     updateDailyBalances(date, amount);
 
-    balanceList.forEach((balance) => print(this.name +
-        ' ' +
-        DateFormat('dd/MM/yyyy').format(balance.date).toString() +
-        ' ' +
-        balance.balance.toString()));
+    //print(balanceMap);
 
-    return balance;
+    balanceMap.forEach((date, balance) => print(this.name +
+        ' ' +
+        DateFormat('dd/MM/yyyy').format(date).toString() +
+        ' ' +
+        balance.toString()));
   }
 
-  DailyBalance getDailyBalance(DateTime dateToSearch) {
+  /*DailyBalance getDailyBalance(DateTime dateToSearch) {
     var beforeDailyBalance;
     for (final balance in balanceList) {
-      switch (DateFormat('yyyyMMdd')
-          .format(balance.date)
-          .compareTo(DateFormat('yyyyMMdd').format(dateToSearch))) {
+      switch (balance.date.compareTo(dateToSearch)) {
         case 0:
           return balance;
         case -1:
@@ -50,9 +54,9 @@ class Account {
     return beforeDailyBalance == null
         ? newDailyBalance(dateToSearch, 0)
         : newDailyBalance(dateToSearch, beforeDailyBalance.balance);
-  }
+  }*/
 
-  DailyBalance newDailyBalance(DateTime date, double balance) {
+  /*DailyBalance newDailyBalance(DateTime date, double balance) {
     //TODO add in a ordered list
 
     var newDailyBalance = DailyBalance(
@@ -62,19 +66,24 @@ class Account {
     );
     balanceList.add(newDailyBalance);
     return newDailyBalance;
-  }
+  }*/
 
   void updateDailyBalances(DateTime initialDate, double amount) {
-    //TODO implement only in next daily balances
+    for (var key = initialDate;
+        key != null;
+        key = balanceMap.firstKeyAfter(key)) {
+      balanceMap[key] += amount;
+    }
 
-    balanceList.forEach((day) {
-      if (DateFormat('dd/MM/yyyy').format(day.date).compareTo(DateFormat('dd/MM/yyyy').format(initialDate)) >= 0) {
+    /*balanceList.forEach((day) {
+      if (day.date.compareTo(initialDate) >= 0) {
         day.updateBalance(amount);
       }
-    });
+    });*/
   }
 
-  double getBalanceByLastDay() => balanceList.isNotEmpty ? balanceList.last.balance : 0.0 ;
+  /*double getBalanceByLastDay() =>
+      balanceList.isNotEmpty ? balanceList.last.balance : 0.0;*/
 
-
+  double getBalanceByDate(DateTime date) => balanceMap[date] ?? 0.0;
 }
