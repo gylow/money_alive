@@ -1,4 +1,5 @@
 enum AccountType {
+  initialBalance,
   movement,
   investment,
   credit,

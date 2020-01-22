@@ -52,6 +52,7 @@ class _MyHomePageStage extends State<MyHomePage> {
   final List<Transaction> _userTransactions = [];
 
   static final List<Account> _accounts = [
+    Account(id: 'a0', name: 'Saldo Inicial', type: AccountType.initialBalance),
     Account(id: 'a1', name: 'Dinheiro', type: AccountType.movement),
     Account(id: 'a2', name: 'Conta Corrente', type: AccountType.movement),
     Account(id: 'a3', name: 'Cartão de Crédito', type: AccountType.credit),

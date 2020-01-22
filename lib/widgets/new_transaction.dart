@@ -93,27 +93,37 @@ class _NewTransactionState extends State<NewTransaction> {
                 keyboardType: TextInputType.numberWithOptions(decimal: true),
                 onSubmitted: (_) => _submitData(),
               ),
-              new ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxHeight: Theme.of(context).textTheme.display2.fontSize,
-                ),
-                child: ListWheelScrollView(
-                  itemExtent: Theme.of(context).textTheme.display2.fontSize,
-                  controller: _inputAccount,
-                  children:
-                      widget.accountList.map((acc) => Text(acc.name)).toList(),
-                ),
-              ),
-              new ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxHeight: Theme.of(context).textTheme.display2.fontSize,
-                ),
-                child: ListWheelScrollView(
-                  itemExtent: Theme.of(context).textTheme.display2.fontSize,
-                  controller: _outputAccount,
-                  children:
-                  widget.accountList.map((acc) => Text(acc.name)).toList(),
-                ),
+              SizedBox(height: 10),
+              Row(
+                children: <Widget>[
+                  ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxHeight: 50.0,
+                      maxWidth: (MediaQuery.of(context).size.width / 2) - 26.0,
+                    ),
+                    child: ListWheelScrollView(
+                      itemExtent: Theme.of(context).textTheme.display2.fontSize,
+                      controller: _outputAccount,
+                      children: widget.accountList
+                          .map((acc) => Text(acc.name))
+                          .toList(),
+                    ),
+                  ),
+                  Text(' >> '),
+                  new ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxHeight: 50.0,
+                      maxWidth: (MediaQuery.of(context).size.width / 2) - 26.0,
+                    ),
+                    child: ListWheelScrollView(
+                      itemExtent: Theme.of(context).textTheme.display2.fontSize,
+                      controller: _inputAccount,
+                      children: widget.accountList.reversed
+                          .map((acc) => Text(acc.name))
+                          .toList(),
+                    ),
+                  ),
+                ],
               ),
               Container(
                 height: 70,
