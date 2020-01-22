@@ -20,4 +20,10 @@ class Transaction {
     input.addEntry(amount, date);
     output.addEntry(amount*-1, date);
   }
+
+  void delete(){
+    input.addEntry(amount*-1, date);
+    output.addEntry(amount, date);
+  }
+
 }

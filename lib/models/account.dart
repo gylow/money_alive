@@ -2,20 +2,23 @@ import 'dart:collection';
 
 import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
+import 'package:money_alive/models/account_type.dart';
 
 class Account {
   final String id;
   final String name;
+  final AccountType type;
   var balanceMap = new SplayTreeMap<DateTime, double>();
 
   Account({
     @required this.id,
     @required this.name,
+    @required this.type,
   });
 
   void addEntry(double amount, DateTime date) {
-
-    balanceMap.putIfAbsent(date, () => balanceMap[balanceMap?.lastKeyBefore(date)] ?? 0.0);
+    balanceMap.putIfAbsent(
+        date, () => balanceMap[balanceMap?.lastKeyBefore(date)] ?? 0.0);
     updateDailyBalances(date, amount);
 
     balanceMap.forEach((date, balance) => print(this.name +

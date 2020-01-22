@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:money_alive/models/account.dart';
+import 'package:money_alive/models/account_type.dart';
 
 import './widgets/new_transaction.dart';
 import './widgets/transaction_list.dart';
@@ -48,24 +49,28 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageStage extends State<MyHomePage> {
-  final List<Transaction> _userTransactions = [
-    /*Transaction(
-      id: 't1',
-      title: 'New shoes',
-      amount: 69.99,
-      date: DateTime.now(),
-    ),
-    */
-  ];
+  final List<Transaction> _userTransactions = [];
 
   static final List<Account> _accounts = [
-    Account(id: 'a1', name: 'Dinheiro'),
-    Account(id: 'a2', name: 'Conta Corrente'),
+    Account(id: 'a1', name: 'Dinheiro', type: AccountType.movement),
+    Account(id: 'a2', name: 'Conta Corrente', type: AccountType.movement),
+    Account(id: 'a3', name: 'Cartão de Crédito', type: AccountType.credit),
+    Account(id: 'a4', name: 'Poupança', type: AccountType.investment),
+    Account(id: 'a5', name: 'Trabalho', type: AccountType.asset),
+    Account(id: 'a6', name: 'Empréstimo', type: AccountType.loan),
+    Account(id: 'a7', name: 'Casa', type: AccountType.loss),
+    Account(id: 'a8', name: 'Mercado', type: AccountType.loss),
+    Account(id: 'a9', name: 'Carro', type: AccountType.loss),
+    Account(id: 'a10', name: 'Juros', type: AccountType.loan),
+    Account(id: 'a11', name: 'Saúde', type: AccountType.loss),
+    Account(id: 'a12', name: 'Diversão', type: AccountType.loss),
+    Account(id: 'a13', name: 'Presentes', type: AccountType.loss),
   ];
 
-  static final DateTime _today = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+  static final DateTime _today =
+      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
 
-  double _heightAcounts = (16.0 * _accounts.length)+2;
+  double _heightAcounts = (16.0 * _accounts.where((ac) => ac.type == AccountType.movement).length);
 
   List<Transaction> get _recentTransactions {
     return _userTransactions.where((tx) {
@@ -78,14 +83,14 @@ class _MyHomePageStage extends State<MyHomePage> {
   }
 
   void _addNewTransaction(
-      String txTitle, double txAmount, DateTime chosenDate) {
+      String txTitle, double txAmount, DateTime chosenDate, Account inputAccount, Account outputAccount,) {
     final newTx = Transaction(
       id: DateTime.now().toString(),
       title: txTitle,
       amount: txAmount,
       date: chosenDate ?? _today,
-      input: _accounts[0],
-      output: _accounts[1],
+      input: inputAccount,
+      output: outputAccount,
     );
 
     setState(() {
@@ -95,7 +100,13 @@ class _MyHomePageStage extends State<MyHomePage> {
 
   void _deleteTransaction(String id) {
     setState(() {
-      _userTransactions.removeWhere((tx) => tx.id == id);
+      _userTransactions.removeWhere((tx) {
+        if (tx.id == id) {
+          tx.delete();
+          return true;
+        }
+        return false;
+      });
     });
   }
 
@@ -105,7 +116,7 @@ class _MyHomePageStage extends State<MyHomePage> {
       builder: (_) {
         return GestureDetector(
           onTap: () {},
-          child: NewTransaction(_addNewTransaction),
+          child: NewTransaction(_addNewTransaction, _accounts),
           behavior: HitTestBehavior.opaque,
         );
       },
@@ -154,21 +165,25 @@ class _MyHomePageStage extends State<MyHomePage> {
                   0.3,
               child: Chart(_recentTransactions),
             ),
+            Divider(),
             Container(
               height: _heightAcounts,
-              color: Colors.amber,
+              //color: Colors.amber,
               child: Column(
-                children: _accounts.map((account) {
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text(' ${account.name}'),
-                      Text('R\$ ${account.getBalanceByDate(_today).toString()} '),
-                    ],
-                  );
-                }).toList(),
+                children: _accounts
+                    .where((ac) => ac.type == AccountType.movement)
+                    .map((account) => Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text(' ${account.name}'),
+                            Text(
+                                'R\$ ${account.getBalanceByDate(_today).toString()} '),
+                          ],
+                        ))
+                    .toList(),
               ),
             ),
+            Divider(),
             Container(
               height: (mediaQuery.size.height -
                       appBar.preferredSize.height -

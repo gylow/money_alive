@@ -2,12 +2,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../widgets/adaptive_flat_button.dart';
+import '../models/account.dart';
+
+import './adaptive_flat_button.dart';
 
 class NewTransaction extends StatefulWidget {
   final Function addTx;
+  final List<Account> accountList;
 
-  NewTransaction(this.addTx);
+  NewTransaction(this.addTx, this.accountList);
 
   @override
   State<StatefulWidget> createState() => _NewTransactionState();
@@ -16,7 +19,10 @@ class NewTransaction extends StatefulWidget {
 class _NewTransactionState extends State<NewTransaction> {
   final _titleControler = TextEditingController();
   final _amountControler = TextEditingController();
-  final _today = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+  final _inputAccount = FixedExtentScrollController();
+  final _outputAccount = FixedExtentScrollController();
+  final _today =
+      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
   DateTime _selectedDate;
 
   void _submitData() {
@@ -39,13 +45,14 @@ class _NewTransactionState extends State<NewTransaction> {
       enteredTitle,
       enteredAmount,
       _selectedDate,
+      widget.accountList[_inputAccount.selectedItem],
+      widget.accountList[_outputAccount.selectedItem],
     );
 
     Navigator.of(context).pop();
   }
 
   void _presentDatePicker() {
-
     showDatePicker(
       context: context,
       initialDate: _today,
@@ -85,6 +92,28 @@ class _NewTransactionState extends State<NewTransaction> {
                 controller: _amountControler,
                 keyboardType: TextInputType.numberWithOptions(decimal: true),
                 onSubmitted: (_) => _submitData(),
+              ),
+              new ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxHeight: Theme.of(context).textTheme.display2.fontSize,
+                ),
+                child: ListWheelScrollView(
+                  itemExtent: Theme.of(context).textTheme.display2.fontSize,
+                  controller: _inputAccount,
+                  children:
+                      widget.accountList.map((acc) => Text(acc.name)).toList(),
+                ),
+              ),
+              new ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxHeight: Theme.of(context).textTheme.display2.fontSize,
+                ),
+                child: ListWheelScrollView(
+                  itemExtent: Theme.of(context).textTheme.display2.fontSize,
+                  controller: _outputAccount,
+                  children:
+                  widget.accountList.map((acc) => Text(acc.name)).toList(),
+                ),
               ),
               Container(
                 height: 70,
