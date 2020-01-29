@@ -14,7 +14,7 @@ class ChartBar extends StatelessWidget {
         return Column(
           children: <Widget>[
             Container(
-              child: FittedBox(
+              child: SizedBox(
                 child: Text('R\$${spendingAmount.toStringAsFixed(0)}'),
               ),
               height: constraints.maxHeight * 0.15,

@@ -1,5 +1,7 @@
+import 'package:decimal/decimal.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
 import '../models/account.dart';
@@ -14,6 +16,27 @@ class NewTransaction extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() => _NewTransactionState();
+}
+
+class CurrencyInputFormatter extends TextInputFormatter {
+  final String myLocate;
+
+  CurrencyInputFormatter(this.myLocate);
+
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    if (newValue.selection.baseOffset == 0) {
+      return newValue;
+    }
+
+    double value = double.parse(newValue.text);
+    final formatter = NumberFormat.simpleCurrency(locale: myLocate);
+    String newText = formatter.format(value / (100));
+
+    return newValue.copyWith(
+        text: newText,
+        selection: TextSelection.collapsed(offset: newText.length));
+  }
 }
 
 class _NewTransactionState extends State<NewTransaction> {
@@ -34,9 +57,16 @@ class _NewTransactionState extends State<NewTransaction> {
     print(_amountControler.text);
 
     final enteredTitle = _titleControler.text;
-    final enteredAmount = double.parse(_amountControler.text);
+    var onlyNumbers = RegExp(r"([^0-9])");
 
-    if (enteredTitle.isEmpty || enteredAmount <= 0) {
+    final enteredAmount = Decimal.tryParse(
+          _amountControler.text.replaceAll(onlyNumbers, ''),
+        ) /
+        Decimal.fromInt(100);
+
+    if (enteredTitle.isEmpty ||
+        enteredAmount == null ||
+        enteredAmount <= Decimal.zero) {
       print('vazio ou valor negativo');
       return;
     }
@@ -45,7 +75,7 @@ class _NewTransactionState extends State<NewTransaction> {
       enteredTitle,
       enteredAmount,
       _selectedDate,
-      widget.accountList[_inputAccount.selectedItem],
+      widget.accountList.reversed.elementAt(_inputAccount.selectedItem),
       widget.accountList[_outputAccount.selectedItem],
     );
 
@@ -90,7 +120,12 @@ class _NewTransactionState extends State<NewTransaction> {
               TextField(
                 decoration: InputDecoration(labelText: 'Amount'),
                 controller: _amountControler,
-                keyboardType: TextInputType.numberWithOptions(decimal: true),
+                keyboardType: TextInputType.numberWithOptions(
+                    decimal: false, signed: false),
+                inputFormatters: [
+                  WhitelistingTextInputFormatter.digitsOnly,
+                  CurrencyInputFormatter('pt_BR'),
+                ],
                 onSubmitted: (_) => _submitData(),
               ),
               SizedBox(height: 10),
@@ -99,27 +134,27 @@ class _NewTransactionState extends State<NewTransaction> {
                   ConstrainedBox(
                     constraints: BoxConstraints(
                       maxHeight: 50.0,
-                      maxWidth: (MediaQuery.of(context).size.width / 2) - 26.0,
+                      maxWidth: (MediaQuery.of(context).size.width / 2) - 32.0,
                     ),
                     child: ListWheelScrollView(
                       itemExtent: Theme.of(context).textTheme.display2.fontSize,
                       controller: _outputAccount,
                       children: widget.accountList
-                          .map((acc) => Text(acc.name))
+                          .map((acc) => Text(acc.getName()))
                           .toList(),
                     ),
                   ),
-                  Text(' >> '),
+                  Text(' ==> '),
                   new ConstrainedBox(
                     constraints: BoxConstraints(
                       maxHeight: 50.0,
-                      maxWidth: (MediaQuery.of(context).size.width / 2) - 26.0,
+                      maxWidth: (MediaQuery.of(context).size.width / 2) - 32.0,
                     ),
                     child: ListWheelScrollView(
                       itemExtent: Theme.of(context).textTheme.display2.fontSize,
                       controller: _inputAccount,
                       children: widget.accountList.reversed
-                          .map((acc) => Text(acc.name))
+                          .map((acc) => Text(acc.getName()))
                           .toList(),
                     ),
                   ),

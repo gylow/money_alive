@@ -1,8 +1,12 @@
 import 'dart:core';
 import 'dart:io';
+//import 'package:flutter_localizations/flutter_localizations.dart';
+
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
+import 'package:decimal/decimal.dart';
 import 'package:money_alive/models/account.dart';
 import 'package:money_alive/models/account_type.dart';
 
@@ -21,7 +25,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.purple,
         accentColor: Colors.amber,
-        //errorColor: Colors.red ,
+        errorColor: Colors.red ,
         textTheme: ThemeData.light().textTheme.copyWith(
               title: TextStyle(
                 fontSize: 16,
@@ -29,6 +33,7 @@ class MyApp extends StatelessWidget {
               ),
               button: TextStyle(color: Colors.white),
             ),
+
         appBarTheme: AppBarTheme(
           textTheme: ThemeData.light().textTheme.copyWith(
                 title: TextStyle(
@@ -38,7 +43,17 @@ class MyApp extends StatelessWidget {
               ),
         ),
       ),
+      /*localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: [
+        const Locale('en'), // English
+        const Locale('pt_BR'), // Brazilian Portuguese
+      ],*/
       home: MyHomePage(),
+      //locale: Locale('pt'),
     );
   }
 }
@@ -49,33 +64,35 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageStage extends State<MyHomePage> {
+
   final List<Transaction> _userTransactions = [];
 
   static final List<Account> _accounts = [
-    Account(id: 'a0', name: 'Saldo Inicial', type: AccountType.initialBalance),
-    Account(id: 'a1', name: 'Dinheiro', type: AccountType.movement),
-    Account(id: 'a2', name: 'Conta Corrente', type: AccountType.movement),
-    Account(id: 'a3', name: 'Cartão de Crédito', type: AccountType.credit),
-    Account(id: 'a4', name: 'Poupança', type: AccountType.investment),
-    Account(id: 'a5', name: 'Trabalho', type: AccountType.asset),
-    Account(id: 'a6', name: 'Empréstimo', type: AccountType.loan),
-    Account(id: 'a7', name: 'Casa', type: AccountType.loss),
-    Account(id: 'a8', name: 'Mercado', type: AccountType.loss),
-    Account(id: 'a9', name: 'Carro', type: AccountType.loss),
-    Account(id: 'a10', name: 'Juros', type: AccountType.loan),
-    Account(id: 'a11', name: 'Saúde', type: AccountType.loss),
-    Account(id: 'a12', name: 'Diversão', type: AccountType.loss),
-    Account(id: 'a13', name: 'Presentes', type: AccountType.loss),
+    Account('a1', 'Dinheiro', AccountType.movement),
+    Account('a2', 'Conta Corrente', AccountType.movement),
+    Account('a0', 'Saldo Inicial', AccountType.initialBalance),
+    Account('a3', 'Cartão de Crédito', AccountType.credit),
+    Account('a4', 'Poupança', AccountType.investment),
+    Account('a5', 'Trabalho', AccountType.asset),
+    Account('a6', 'Empréstimo', AccountType.loan),
+    Account('a7', 'Casa', AccountType.loss),
+    Account('a8', 'Mercado', AccountType.loss),
+    Account('a9', 'Carro', AccountType.loss),
+    Account('a10', 'Juros', AccountType.loan),
+    Account('a11', 'Saúde', AccountType.loss),
+    Account('a12', 'Diversão', AccountType.loss),
+    Account('a13', 'Presentes', AccountType.loss),
   ];
 
   static final DateTime _today =
       DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
 
-  double _heightAcounts = (16.0 * _accounts.where((ac) => ac.type == AccountType.movement).length);
+  double _heightAcounts =
+  (20.0 * _accounts.where((ac) => ac.isType(AccountType.movement)).length) + 6 ;
 
   List<Transaction> get _recentTransactions {
     return _userTransactions.where((tx) {
-      return tx.date.isAfter(
+      return tx.getDate().isAfter(
         DateTime.now().subtract(
           Duration(days: 7),
         ),
@@ -84,14 +101,19 @@ class _MyHomePageStage extends State<MyHomePage> {
   }
 
   void _addNewTransaction(
-      String txTitle, double txAmount, DateTime chosenDate, Account inputAccount, Account outputAccount,) {
+    String txTitle,
+    Decimal txAmount,
+    DateTime chosenDate,
+    Account inputAccount,
+    Account outputAccount,
+  ) {
     final newTx = Transaction(
-      id: DateTime.now().toString(),
-      title: txTitle,
-      amount: txAmount,
-      date: chosenDate ?? _today,
-      input: inputAccount,
-      output: outputAccount,
+      DateTime.now().toString(),
+      txTitle,
+      txAmount,
+      chosenDate ?? _today,
+      inputAccount,
+      outputAccount,
     );
 
     setState(() {
@@ -166,25 +188,31 @@ class _MyHomePageStage extends State<MyHomePage> {
                   0.3,
               child: Chart(_recentTransactions),
             ),
-            Divider(),
+            //Divider(),
             Container(
+              padding: EdgeInsets.only(right: 20, left: 20),
               height: _heightAcounts,
               //color: Colors.amber,
               child: Column(
                 children: _accounts
-                    .where((ac) => ac.type == AccountType.movement)
+                    .where((ac) => ac.isType(AccountType.movement))
                     .map((account) => Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                            Text(' ${account.name}'),
                             Text(
-                                'R\$ ${account.getBalanceByDate(_today).toString()} '),
+                              ' ${account.getName()}',
+                              style: Theme.of(context).textTheme.title,
+                            ),
+                            Text(
+                              'R\$ ${account.getBalanceByDate(_today).toString()} ',
+                              style: Theme.of(context).textTheme.title,
+                            ),
                           ],
                         ))
                     .toList(),
               ),
             ),
-            Divider(),
+            //Divider(),
             Container(
               height: (mediaQuery.size.height -
                       appBar.preferredSize.height -

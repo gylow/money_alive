@@ -27,10 +27,11 @@ class Chart extends StatelessWidget {
       var totalSum = 0.0;
 
       for (var tx in recentTransactions) {
-        if (tx.date.day == weekDay.day &&
-            tx.date.month == weekDay.month &&
-            tx.date.year == weekDay.year) {
-          totalSum += tx.amount;
+        var date = tx.getDate();
+        if (date.day == weekDay.day &&
+            date.month == weekDay.month &&
+            date.year == weekDay.year) {
+          totalSum += tx.getAmount().toDouble();
         }
       }
 
