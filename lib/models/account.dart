@@ -38,10 +38,13 @@ class Account {
     }
   }
 
-  String getBalanceByDate(DateTime date) => (balanceMap[date] ??
-          balanceMap[balanceMap?.lastKeyBefore(date)] ??
-          Decimal.zero)
-      .toStringAsFixed(2);
+  String getBalanceByDate(DateTime date) {
+    final formatter = NumberFormat.simpleCurrency(locale: 'pt_BR');
+
+    return formatter.format((balanceMap[date] ??
+        balanceMap[balanceMap?.lastKeyBefore(date)] ??
+        Decimal.zero).toDouble());
+  }
 
   String getName() => _name;
 

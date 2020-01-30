@@ -38,6 +38,8 @@ class Transaction {
 
   String getDateFormated() => DateFormat('dd/MM/yyyy').format(_date);
 
+  String getInput() => _input.getName();
 
+  String getOutput() => _output.getName();
 
 }

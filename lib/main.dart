@@ -2,7 +2,6 @@ import 'dart:core';
 import 'dart:io';
 //import 'package:flutter_localizations/flutter_localizations.dart';
 
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -25,7 +24,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.purple,
         accentColor: Colors.amber,
-        errorColor: Colors.red ,
+        errorColor: Colors.red,
         textTheme: ThemeData.light().textTheme.copyWith(
               title: TextStyle(
                 fontSize: 16,
@@ -33,7 +32,6 @@ class MyApp extends StatelessWidget {
               ),
               button: TextStyle(color: Colors.white),
             ),
-
         appBarTheme: AppBarTheme(
           textTheme: ThemeData.light().textTheme.copyWith(
                 title: TextStyle(
@@ -64,39 +62,154 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageStage extends State<MyHomePage> {
+  final List<Transaction> _userTransactions = [
+    Transaction(
+      DateTime.now().toString(),
+      "Bom Preço",
+      Decimal.parse("67.32"),
+      _today,
+      _accounts[20],
+      _accounts[1],
+    ),
+    Transaction(
+      DateTime.now().toString(),
+      "Lavagem Carro",
+      Decimal.parse("30.00"),
+      _today.subtract(new Duration(days: 1)),
+      _accounts[18],
+      _accounts[3],
+    ),
+    Transaction(
+      DateTime.now().toString(),
+      "Bolo",
+      Decimal.parse("16.00"),
+      _today.subtract(new Duration(days: 2)),
+      _accounts[23],
+      _accounts[3],
+    ),
+    Transaction(
+      DateTime.now().toString(),
+      "Corte Cabelo",
+      Decimal.parse("15"),
+      _today.subtract(new Duration(days: 3)),
+      _accounts[32],
+      _accounts[1],
+    ),
+    Transaction(
+      DateTime.now().toString(),
+      "Presente",
+      Decimal.parse("97.3"),
+      _today.subtract(new Duration(days: 4)),
+      _accounts[28],
+      _accounts[3],
+    ),Transaction(
+      DateTime.now().toString(),
+      "Remédio",
+      Decimal.parse("27.32"),
+      _today.subtract(new Duration(days: 5)),
+      _accounts[29],
+      _accounts[3],
+    ),
+    Transaction(
+      DateTime.now().toString(),
+      "IPTU",
+      Decimal.parse("81.02"),
+      _today.subtract(new Duration(days: 6)),
+      _accounts[17],
+      _accounts[2],
+    ),
 
-  final List<Transaction> _userTransactions = [];
+    Transaction(
+      DateTime.now().toString(),
+      "Saldo inicial",
+      Decimal.parse("100"),
+      _today.subtract(new Duration(days: 7)),
+      _accounts[1],
+      _accounts[0],
+    ),
+    Transaction(
+      DateTime.now().toString(),
+      "Saldo inicial",
+      Decimal.parse("200"),
+      _today.subtract(new Duration(days: 7)),
+      _accounts[2],
+      _accounts[0],
+    ),
+    Transaction(
+      DateTime.now().toString(),
+      "Saldo inicial",
+      Decimal.parse("300"),
+      _today.subtract(new Duration(days: 7)),
+      _accounts[3],
+      _accounts[0],
+    ),
+    Transaction(
+      DateTime.now().toString(),
+      "Saldo inicial",
+      Decimal.parse("1.45"),
+      _today.subtract(new Duration(days: 7)),
+      _accounts[4],
+      _accounts[0],
+    ),
+  ];
 
   static final List<Account> _accounts = [
-    Account('a1', 'Dinheiro', AccountType.movement),
-    Account('a2', 'Conta Corrente', AccountType.movement),
+    //Start balance
     Account('a0', 'Saldo Inicial', AccountType.initialBalance),
-    Account('a3', 'Cartão de Crédito', AccountType.credit),
-    Account('a4', 'Poupança', AccountType.investment),
-    Account('a5', 'Trabalho', AccountType.asset),
-    Account('a6', 'Empréstimo', AccountType.loan),
-    Account('a7', 'Casa', AccountType.loss),
-    Account('a8', 'Mercado', AccountType.loss),
-    Account('a9', 'Carro', AccountType.loss),
-    Account('a10', 'Juros', AccountType.loan),
-    Account('a11', 'Saúde', AccountType.loss),
-    Account('a12', 'Diversão', AccountType.loss),
-    Account('a13', 'Presentes', AccountType.loss),
+    //Movement
+    Account('a01', 'Dinheiro', AccountType.movement),
+    Account('a02', 'C. Corrente BB', AccountType.movement),
+    Account('a03', 'C. Corrente Nubank', AccountType.movement),
+    Account('a04', 'C. Corrente Easy', AccountType.movement),
+    //Investment
+    Account('a05', 'Poupança Nubank', AccountType.investment),
+    Account('a06', 'Investimentos Easy', AccountType.investment),
+    //Loan
+    Account('a07', 'Empréstimo', AccountType.loan),
+    Account('a08', 'Juros', AccountType.loan),
+    //Credit
+    Account('a09', 'C. Crédito Saraiva', AccountType.credit),
+    Account('a10', 'C. Crédito Nubank', AccountType.credit),
+    Account('a11', 'C. Crédito Submarino', AccountType.credit),
+    Account('a12', 'C. Crédito Americanas', AccountType.credit),
+    //Asset
+    Account('a13', 'Trabalho', AccountType.asset),
+    Account('a14', 'Rendimento', AccountType.asset),
+    Account('a15', 'Doações', AccountType.asset),
+    //Loss
+    Account('a16', 'Atividade Física', AccountType.loss),
+    Account('a17', 'Casa', AccountType.loss),
+    Account('a18', 'Carro', AccountType.loss),
+    Account('a19', 'Luz', AccountType.loss),
+    Account('a20', 'Mercado', AccountType.loss),
+    Account('a21', 'Telefonia', AccountType.loss),
+    Account('a22', 'Educação', AccountType.loss),
+    Account('a23', 'Alimentação', AccountType.loss),
+    Account('a24', 'Diversão', AccountType.loss),
+    Account('a25', 'Doação', AccountType.loss),
+    Account('a26', 'Itens Pessoais', AccountType.loss),
+    Account('a27', 'Impostos', AccountType.loss),
+    Account('a28', 'Presentes', AccountType.loss),
+    Account('a29', 'Saúde', AccountType.loss),
+    Account('a30', 'Serviços gerais', AccountType.loss),
+    Account('a31', 'Transporte', AccountType.loss),
+    Account('a32', 'Vestuário', AccountType.loss),
   ];
 
   static final DateTime _today =
       DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
 
   double _heightAcounts =
-  (20.0 * _accounts.where((ac) => ac.isType(AccountType.movement)).length) + 6 ;
+      (20.0 * _accounts.where((ac) => ac.isType(AccountType.movement)).length) +
+          6;
 
   List<Transaction> get _recentTransactions {
     return _userTransactions.where((tx) {
       return tx.getDate().isAfter(
-        DateTime.now().subtract(
-          Duration(days: 7),
-        ),
-      );
+            DateTime.now().subtract(
+              Duration(days: 7),
+            ),
+          );
     }).toList();
   }
 
@@ -200,11 +313,11 @@ class _MyHomePageStage extends State<MyHomePage> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Text(
-                              ' ${account.getName()}',
+                              account.getName(),
                               style: Theme.of(context).textTheme.title,
                             ),
                             Text(
-                              'R\$ ${account.getBalanceByDate(_today).toString()} ',
+                              account.getBalanceByDate(_today),
                               style: Theme.of(context).textTheme.title,
                             ),
                           ],

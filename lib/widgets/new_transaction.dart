@@ -130,11 +130,13 @@ class _NewTransactionState extends State<NewTransaction> {
               ),
               SizedBox(height: 10),
               Row(
+                //TODO new form height
+                //crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
                   ConstrainedBox(
                     constraints: BoxConstraints(
                       maxHeight: 50.0,
-                      maxWidth: (MediaQuery.of(context).size.width / 2) - 32.0,
+                      maxWidth: (MediaQuery.of(context).size.width * 0.4) ,
                     ),
                     child: ListWheelScrollView(
                       itemExtent: Theme.of(context).textTheme.display2.fontSize,
@@ -144,11 +146,12 @@ class _NewTransactionState extends State<NewTransaction> {
                           .toList(),
                     ),
                   ),
-                  Text(' ==> '),
-                  new ConstrainedBox(
+                  //Container(child: Text('==>'), color: Colors.lime,),
+                  Text('  ==>  '),
+                  ConstrainedBox(
                     constraints: BoxConstraints(
                       maxHeight: 50.0,
-                      maxWidth: (MediaQuery.of(context).size.width / 2) - 32.0,
+                      maxWidth: (MediaQuery.of(context).size.width * 0.4),
                     ),
                     child: ListWheelScrollView(
                       itemExtent: Theme.of(context).textTheme.display2.fontSize,

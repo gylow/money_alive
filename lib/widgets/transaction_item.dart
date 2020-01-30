@@ -31,7 +31,7 @@ class TransactionItem extends StatelessWidget {
           transaction.getTitle(),
           style: Theme.of(context).textTheme.title,
         ),
-        subtitle: Text(transaction.getDateFormated()),
+        subtitle: Text("${transaction.getDateFormated()}\n${transaction.getOutput()} >> ${transaction.getInput()}"),
 
         trailing: MediaQuery.of(context).size.width > 500
             ? FlatButton.icon(
