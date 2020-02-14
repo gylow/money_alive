@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:decimal/decimal.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
@@ -82,6 +85,32 @@ class _NewTransactionState extends State<NewTransaction> {
     Navigator.of(context).pop();
   }
 
+  Widget _scrollAccountsView(
+      FixedExtentScrollController controller, bool reversed) {
+    return Platform.isIOS
+        ? //TODO implements the CupertinoPicker(
+        ListWheelScrollView(
+            magnification: 1.1,
+            useMagnifier: true,
+            itemExtent: Theme.of(context).textTheme.display2.fontSize,
+            controller: controller,
+            children:
+                (reversed ? widget.accountList.reversed : widget.accountList)
+                    .map((account) => Text(account.getName()))
+                    .toList(),
+          )
+        : ListWheelScrollView(
+            magnification: 1.1,
+            useMagnifier: true,
+            itemExtent: Theme.of(context).textTheme.display2.fontSize,
+            controller: controller,
+            children:
+                (reversed ? widget.accountList.reversed : widget.accountList)
+                    .map((account) => Text(account.getName()))
+                    .toList(),
+          );
+  }
+
   void _presentDatePicker() {
     showDatePicker(
       context: context,
@@ -128,38 +157,27 @@ class _NewTransactionState extends State<NewTransaction> {
                 ],
                 onSubmitted: (_) => _submitData(),
               ),
-              SizedBox(height: 10),
+              SizedBox(height: 30),
               Row(
-                //TODO new form height
-                //crossAxisAlignment: CrossAxisAlignment.stretch,
+                verticalDirection: VerticalDirection.up,
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: <Widget>[
                   ConstrainedBox(
-                    constraints: BoxConstraints(
-                      maxHeight: 50.0,
-                      maxWidth: (MediaQuery.of(context).size.width * 0.4) ,
-                    ),
-                    child: ListWheelScrollView(
-                      itemExtent: Theme.of(context).textTheme.display2.fontSize,
-                      controller: _outputAccount,
-                      children: widget.accountList
-                          .map((acc) => Text(acc.getName()))
-                          .toList(),
-                    ),
+                      constraints: BoxConstraints(
+                        maxHeight: 50.0,
+                        maxWidth: (MediaQuery.of(context).size.width * 0.4),
+                      ),
+                      child: _scrollAccountsView(_outputAccount, false)),
+                  Container(
+                    padding: EdgeInsets.only(top: 5),
+                    child: Text('  ==>  '),
                   ),
-                  //Container(child: Text('==>'), color: Colors.lime,),
-                  Text('  ==>  '),
                   ConstrainedBox(
                     constraints: BoxConstraints(
                       maxHeight: 50.0,
                       maxWidth: (MediaQuery.of(context).size.width * 0.4),
                     ),
-                    child: ListWheelScrollView(
-                      itemExtent: Theme.of(context).textTheme.display2.fontSize,
-                      controller: _inputAccount,
-                      children: widget.accountList.reversed
-                          .map((acc) => Text(acc.getName()))
-                          .toList(),
-                    ),
+                    child: _scrollAccountsView(_inputAccount, true),
                   ),
                 ],
               ),

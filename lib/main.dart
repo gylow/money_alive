@@ -155,23 +155,23 @@ class _MyHomePageStage extends State<MyHomePage> {
 
   static final List<Account> _accounts = [
     //Start balance
-    Account('a0', 'Saldo Inicial', AccountType.initialBalance),
+    Account('a00', 'Saldo Inicial', AccountType.initialBalance),
     //Movement
     Account('a01', 'Dinheiro', AccountType.movement),
-    Account('a02', 'C. Corrente BB', AccountType.movement),
-    Account('a03', 'C. Corrente Nubank', AccountType.movement),
-    Account('a04', 'C. Corrente Easy', AccountType.movement),
+    Account('a02', 'C.Corrente BB', AccountType.movement),
+    Account('a03', 'C.Corrente Nubank', AccountType.movement),
+    Account('a04', 'C.Corrente Easy', AccountType.movement),
     //Investment
     Account('a05', 'Poupança Nubank', AccountType.investment),
-    Account('a06', 'Investimentos Easy', AccountType.investment),
+    Account('a06', 'Invest. Easy', AccountType.investment),
     //Loan
     Account('a07', 'Empréstimo', AccountType.loan),
     Account('a08', 'Juros', AccountType.loan),
     //Credit
-    Account('a09', 'C. Crédito Saraiva', AccountType.credit),
-    Account('a10', 'C. Crédito Nubank', AccountType.credit),
-    Account('a11', 'C. Crédito Submarino', AccountType.credit),
-    Account('a12', 'C. Crédito Americanas', AccountType.credit),
+    Account('a09', 'C.Créd. Saraiva', AccountType.credit),
+    Account('a10', 'C.Créd. Nubank', AccountType.credit),
+    Account('a11', 'C.Créd. Submarino', AccountType.credit),
+    Account('a12', 'C.Créd. Americanas', AccountType.credit),
     //Asset
     Account('a13', 'Trabalho', AccountType.asset),
     Account('a14', 'Rendimento', AccountType.asset),
