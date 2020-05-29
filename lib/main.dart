@@ -26,15 +26,16 @@ class MyApp extends StatelessWidget {
         accentColor: Colors.amber,
         errorColor: Colors.red,
         textTheme: ThemeData.light().textTheme.copyWith(
-              title: TextStyle(
+              bodyText1: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
               ),
               button: TextStyle(color: Colors.white),
             ),
         appBarTheme: AppBarTheme(
+          color: Colors.purple,
           textTheme: ThemeData.light().textTheme.copyWith(
-                title: TextStyle(
+                headline6: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
@@ -61,7 +62,24 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageStage createState() => _MyHomePageStage();
 }
 
-class _MyHomePageStage extends State<MyHomePage> {
+class _MyHomePageStage extends State<MyHomePage> with WidgetsBindingObserver {
+  @override
+  void initState() {
+    WidgetsBinding.instance.addObserver(this);
+    super.initState();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    print(state);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
   final List<Transaction> _userTransactions = [
     Transaction(
       DateTime.now().toString(),
@@ -102,7 +120,8 @@ class _MyHomePageStage extends State<MyHomePage> {
       _today.subtract(new Duration(days: 4)),
       _accounts[28],
       _accounts[3],
-    ),Transaction(
+    ),
+    Transaction(
       DateTime.now().toString(),
       "Remédio",
       Decimal.parse("27.32"),
@@ -118,7 +137,6 @@ class _MyHomePageStage extends State<MyHomePage> {
       _accounts[17],
       _accounts[2],
     ),
-
     Transaction(
       DateTime.now().toString(),
       "Saldo inicial",
@@ -314,11 +332,11 @@ class _MyHomePageStage extends State<MyHomePage> {
                           children: <Widget>[
                             Text(
                               account.getName(),
-                              style: Theme.of(context).textTheme.title,
+                              style: Theme.of(context).textTheme.bodyText1,
                             ),
                             Text(
                               account.getBalanceByDate(_today),
-                              style: Theme.of(context).textTheme.title,
+                              style: Theme.of(context).textTheme.bodyText1,
                             ),
                           ],
                         ))

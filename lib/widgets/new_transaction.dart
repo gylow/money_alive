@@ -92,7 +92,7 @@ class _NewTransactionState extends State<NewTransaction> {
         ListWheelScrollView(
             magnification: 1.1,
             useMagnifier: true,
-            itemExtent: Theme.of(context).textTheme.display2.fontSize,
+            itemExtent: Theme.of(context).textTheme.bodyText1.fontSize,
             controller: controller,
             children:
                 (reversed ? widget.accountList.reversed : widget.accountList)
@@ -102,7 +102,7 @@ class _NewTransactionState extends State<NewTransaction> {
         : ListWheelScrollView(
             magnification: 1.1,
             useMagnifier: true,
-            itemExtent: Theme.of(context).textTheme.display2.fontSize,
+            itemExtent: Theme.of(context).textTheme.bodyText1.fontSize,
             controller: controller,
             children:
                 (reversed ? widget.accountList.reversed : widget.accountList)
