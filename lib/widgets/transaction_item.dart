@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 import '../models/transaction.dart';
-
 
 class TransactionItem extends StatelessWidget {
   const TransactionItem({
@@ -25,30 +23,29 @@ class TransactionItem extends StatelessWidget {
           child: Padding(
             padding: EdgeInsets.all(3),
             child: FittedBox(
-              child: Text(
-                  '${transaction.amount.toStringAsFixed(2)}'),
+              child: Text(transaction.getAmountFormated()),
             ),
           ),
         ),
         title: Text(
-          transaction.title,
-          style: Theme.of(context).textTheme.title,
+          transaction.getTitle(),
+          style: Theme.of(context).textTheme.bodyText1,
         ),
         subtitle: Text(
-          DateFormat.yMMMEd().format(transaction.date),
-        ),
+            "${transaction.getDateFormated()}\n${transaction.getOutput()} >> ${transaction.getInput()}"),
+
         trailing: MediaQuery.of(context).size.width > 500
             ? FlatButton.icon(
-          onPressed: () => deleteTx(transaction.id),
-          icon: Icon(Icons.delete),
-          label: Text('delete'),
-          textColor: Theme.of(context).errorColor,
-        )
+                onPressed: () => deleteTx(transaction.id),
+                icon: Icon(Icons.delete),
+                label: Text('delete'),
+                textColor: Theme.of(context).errorColor,
+              )
             : IconButton(
-          icon: Icon(Icons.delete),
-          color: Theme.of(context).errorColor,
-          onPressed: () => deleteTx(transaction.id),
-        ), //trailing: ,
+                icon: Icon(Icons.delete),
+                color: Theme.of(context).errorColor,
+                onPressed: () => deleteTx(transaction.id),
+              ), //trailing: ,
       ),
     );
   }

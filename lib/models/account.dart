@@ -1,31 +1,36 @@
 import 'dart:collection';
 
-import 'package:flutter/foundation.dart';
+import 'package:decimal/decimal.dart';
 import 'package:intl/intl.dart';
+import 'package:money_alive/models/account_type.dart';
+
+import './account_type.dart';
 
 class Account {
   final String id;
-  final String name;
-  var balanceMap = new SplayTreeMap<DateTime, double>();
+  final String _name;
+  final AccountType _type;
+  var balanceMap = new SplayTreeMap<DateTime, Decimal>();
 
-  Account({
-    @required this.id,
-    @required this.name,
-  });
+  Account(
+    this.id,
+    this._name,
+    this._type,
+  );
 
-  void addEntry(double amount, DateTime date) {
-
-    balanceMap.putIfAbsent(date, () => balanceMap[balanceMap?.lastKeyBefore(date)] ?? 0.0);
+  void addEntry(Decimal amount, DateTime date) {
+    balanceMap.putIfAbsent(date,
+        () => balanceMap[balanceMap?.lastKeyBefore(date)] ?? Decimal.zero);
     updateDailyBalances(date, amount);
 
-    balanceMap.forEach((date, balance) => print(this.name +
+    balanceMap.forEach((date, balance) => print(this._name +
         ' ' +
         DateFormat('dd/MM/yyyy').format(date).toString() +
         ' ' +
         balance.toString()));
   }
 
-  void updateDailyBalances(DateTime initialDate, double amount) {
+  void updateDailyBalances(DateTime initialDate, Decimal amount) {
     for (var key = initialDate;
         key != null;
         key = balanceMap.firstKeyAfter(key)) {
@@ -33,5 +38,17 @@ class Account {
     }
   }
 
-  double getBalanceByDate(DateTime date) => balanceMap[date] ?? 0.0;
+  String getBalanceByDate(DateTime date) {
+    final formatter = NumberFormat.simpleCurrency(locale: 'pt_BR');
+
+    return formatter.format((balanceMap[date] ??
+        balanceMap[balanceMap?.lastKeyBefore(date)] ??
+        Decimal.zero).toDouble());
+  }
+
+  String getName() => _name;
+
+  String getType() => _type.toString();
+
+  bool isType(AccountType accountTest) => _type == accountTest;
 }
