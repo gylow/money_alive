@@ -33,6 +33,7 @@ class MyApp extends StatelessWidget {
               button: TextStyle(color: Colors.white),
             ),
         appBarTheme: AppBarTheme(
+          //TODO set the color of background of AppBar
           color: Colors.purple,
           textTheme: ThemeData.light().textTheme.copyWith(
                 headline6: TextStyle(
@@ -80,7 +81,40 @@ class _MyHomePageStage extends State<MyHomePage> with WidgetsBindingObserver {
     super.dispose();
   }
 
+  final int _maxTransactionsToDisplay = 10;
   final List<Transaction> _userTransactions = [
+    Transaction(
+      DateTime.now().toString(),
+      "Saldo inicial",
+      Decimal.parse("1.45"),
+      _today.subtract(new Duration(days: 7)),
+      _accounts[4],
+      _accounts[0],
+    ),
+    Transaction(
+      DateTime.now().toString(),
+      "Saldo inicial",
+      Decimal.parse("100"),
+      _today.subtract(new Duration(days: 7)),
+      _accounts[1],
+      _accounts[0],
+    ),
+    Transaction(
+      DateTime.now().toString(),
+      "Saldo inicial",
+      Decimal.parse("200"),
+      _today.subtract(new Duration(days: 7)),
+      _accounts[2],
+      _accounts[0],
+    ),
+    Transaction(
+      DateTime.now().toString(),
+      "Saldo inicial",
+      Decimal.parse("300"),
+      _today.subtract(new Duration(days: 7)),
+      _accounts[3],
+      _accounts[0],
+    ),
     Transaction(
       DateTime.now().toString(),
       "Bom Preço",
@@ -136,38 +170,6 @@ class _MyHomePageStage extends State<MyHomePage> with WidgetsBindingObserver {
       _today.subtract(new Duration(days: 6)),
       _accounts[17],
       _accounts[2],
-    ),
-    Transaction(
-      DateTime.now().toString(),
-      "Saldo inicial",
-      Decimal.parse("100"),
-      _today.subtract(new Duration(days: 7)),
-      _accounts[1],
-      _accounts[0],
-    ),
-    Transaction(
-      DateTime.now().toString(),
-      "Saldo inicial",
-      Decimal.parse("200"),
-      _today.subtract(new Duration(days: 7)),
-      _accounts[2],
-      _accounts[0],
-    ),
-    Transaction(
-      DateTime.now().toString(),
-      "Saldo inicial",
-      Decimal.parse("300"),
-      _today.subtract(new Duration(days: 7)),
-      _accounts[3],
-      _accounts[0],
-    ),
-    Transaction(
-      DateTime.now().toString(),
-      "Saldo inicial",
-      Decimal.parse("1.45"),
-      _today.subtract(new Duration(days: 7)),
-      _accounts[4],
-      _accounts[0],
     ),
   ];
 
@@ -229,6 +231,10 @@ class _MyHomePageStage extends State<MyHomePage> with WidgetsBindingObserver {
             ),
           );
     }).toList();
+  }
+
+  List<Transaction> get _lastOrderedTransactions {
+    return _userTransactions.reversed.take(_maxTransactionsToDisplay).toList();
   }
 
   void _addNewTransaction(
@@ -350,7 +356,8 @@ class _MyHomePageStage extends State<MyHomePage> with WidgetsBindingObserver {
                       mediaQuery.padding.top -
                       _heightAcounts) *
                   0.7,
-              child: TransactionList(_userTransactions, _deleteTransaction),
+              child:
+                  TransactionList(_lastOrderedTransactions, _deleteTransaction),
             ),
           ],
         ),
@@ -365,14 +372,13 @@ class _MyHomePageStage extends State<MyHomePage> with WidgetsBindingObserver {
         : Scaffold(
             appBar: appBar,
             body: pageBody,
+            //TODO remove floatingActionButton from Android
             floatingActionButtonLocation:
                 FloatingActionButtonLocation.centerFloat,
-            floatingActionButton: Platform.isIOS
-                ? Container()
-                : FloatingActionButton(
-                    child: Icon(Icons.add),
-                    onPressed: () => _startAddNewTransaction(context),
-                  ),
+            floatingActionButton: FloatingActionButton(
+              child: Icon(Icons.add),
+              onPressed: () => _startAddNewTransaction(context),
+            ),
           );
   }
 }

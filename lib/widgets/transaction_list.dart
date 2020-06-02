@@ -34,7 +34,6 @@ class TransactionList extends StatelessWidget {
             },
           )
         : ListView.builder(
-            //TODO Order the transaction list by date
             padding: EdgeInsets.all(0),
             itemBuilder: (ctx, index) {
               return new TransactionItem(
