@@ -7,3 +7,10 @@ enum AccountType {
   asset,
   loss,
 }
+
+enum TransactionType {  
+  entry,
+  out,
+  loan,
+  transfer, 
+}

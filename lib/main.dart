@@ -6,13 +6,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:decimal/decimal.dart';
-import 'package:money_alive/models/account.dart';
-import 'package:money_alive/models/account_type.dart';
 
 import './widgets/new_transaction.dart';
 import './widgets/transaction_list.dart';
 import './widgets/chart.dart';
 import './models/transaction.dart';
+import './models/account.dart';
+import './models/enum_types.dart';
 
 void main() => runApp(MyApp());
 
@@ -377,7 +377,7 @@ class _MyHomePageStage extends State<MyHomePage> with WidgetsBindingObserver {
                 FloatingActionButtonLocation.centerFloat,
             floatingActionButton: FloatingActionButton(
               child: Icon(Icons.add),
-              onPressed: () => _startAddNewTransaction(context),
+              onPressed: () => _startAddNewTransaction(context),              
             ),
           );
   }

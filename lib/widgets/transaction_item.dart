@@ -19,6 +19,7 @@ class TransactionItem extends StatelessWidget {
       elevation: 0,
       child: ListTile(
         leading: CircleAvatar(
+          backgroundColor: transaction.getColor(),
           radius: 30,
           child: Padding(
             padding: EdgeInsets.all(3),

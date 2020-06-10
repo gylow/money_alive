@@ -2,9 +2,7 @@ import 'dart:collection';
 
 import 'package:decimal/decimal.dart';
 import 'package:intl/intl.dart';
-import 'package:money_alive/models/account_type.dart';
-
-import './account_type.dart';
+import './enum_types.dart';
 
 class Account {
   final String id;
@@ -48,7 +46,7 @@ class Account {
 
   String getName() => _name;
 
-  String getType() => _type.toString();
+  AccountType getType() => _type;
 
   bool isType(AccountType accountTest) => _type == accountTest;
 }
