@@ -372,13 +372,13 @@ class _MyHomePageStage extends State<MyHomePage> with WidgetsBindingObserver {
         : Scaffold(
             appBar: appBar,
             body: pageBody,
-            //TODO remove floatingActionButton from Android
+            /* 
             floatingActionButtonLocation:
                 FloatingActionButtonLocation.centerFloat,
             floatingActionButton: FloatingActionButton(
               child: Icon(Icons.add),
               onPressed: () => _startAddNewTransaction(context),              
-            ),
+            ),*/
           );
   }
 }
