@@ -9,6 +9,7 @@ enum AccountType {
 }
 
 enum TransactionType {  
+  start,
   entry,
   out,
   loan,
