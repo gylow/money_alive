@@ -33,7 +33,6 @@ class MyApp extends StatelessWidget {
               button: TextStyle(color: Colors.white),
             ),
         appBarTheme: AppBarTheme(
-          //TODO set the color of background of AppBar
           color: Colors.purple,
           textTheme: ThemeData.light().textTheme.copyWith(
                 headline6: TextStyle(
@@ -286,6 +285,8 @@ class _MyHomePageStage extends State<MyHomePage> with WidgetsBindingObserver {
   PreferredSizeWidget iosAppBar(Text title) {
     return CupertinoNavigationBar(
       middle: title,
+      actionsForegroundColor: Colors.white,
+      backgroundColor: Colors.purple,
       trailing: GestureDetector(
         child: Icon(CupertinoIcons.add),
         onTap: () => _startAddNewTransaction(context),
@@ -307,7 +308,7 @@ class _MyHomePageStage extends State<MyHomePage> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    final title = Text("My Money Alyve");
+    final title = Text("My Money Alyve", style: TextStyle(color: Colors.white));
     final mediaQuery = MediaQuery.of(context);
     final appBar = Platform.isIOS ? iosAppBar(title) : androidAppBar(title);
 
