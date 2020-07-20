@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../models/enum_types.dart';
 import '../models/transaction.dart';
 
 class TransactionItem extends StatelessWidget {
@@ -12,6 +13,12 @@ class TransactionItem extends StatelessWidget {
   final Transaction transaction;
   final Function deleteTx;
 
+  Function delete() {
+    return transaction.type != TransactionType.start
+        ? deleteTx(transaction.id)
+        : Null;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -19,6 +26,7 @@ class TransactionItem extends StatelessWidget {
       elevation: 0,
       child: ListTile(
         leading: CircleAvatar(
+          foregroundColor: Colors.black,
           backgroundColor: transaction.getColor(),
           radius: 30,
           child: Padding(
@@ -34,19 +42,22 @@ class TransactionItem extends StatelessWidget {
         ),
         subtitle: Text(
             "${transaction.getDateFormated()}\n${transaction.getFromAccountName()} >> ${transaction.getToAccountName()}"),
-
         trailing: MediaQuery.of(context).size.width > 500
             ? FlatButton.icon(
-                onPressed: () => deleteTx(transaction.id),
+                onPressed: delete,
                 icon: Icon(Icons.delete),
                 label: Text('delete'),
-                textColor: Theme.of(context).errorColor,
+                textColor: transaction.type == TransactionType.start
+                    ? transaction.getColor()
+                    : Theme.of(context).errorColor,
               )
             : IconButton(
                 icon: Icon(Icons.delete),
-                color: Theme.of(context).errorColor,
-                onPressed: () => deleteTx(transaction.id),
-              ), //trailing: ,
+                color: transaction.type == TransactionType.start
+                    ? transaction.getColor()
+                    : Theme.of(context).errorColor,
+                onPressed: delete,
+              ),
       ),
     );
   }
