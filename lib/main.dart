@@ -13,6 +13,7 @@ import './widgets/chart.dart';
 import './models/transaction.dart';
 import './models/account.dart';
 import './models/enum_types.dart';
+import './dummy_data.dart';
 
 void main() => runApp(MyApp());
 
@@ -80,150 +81,17 @@ class _MyHomePageStage extends State<MyHomePage> with WidgetsBindingObserver {
     super.dispose();
   }
 
-  final int _maxTransactionsToDisplay = 10;
-  final List<Transaction> _userTransactions = [
-    Transaction(
-      DateTime.now().toString(),
-      "Saldo inicial",
-      Decimal.parse("1.45"),
-      _today.subtract(new Duration(days: 7)),
-      _accounts[4],
-      _accounts[0],
-    ),
-    Transaction(
-      DateTime.now().toString(),
-      "Saldo inicial",
-      Decimal.parse("100"),
-      _today.subtract(new Duration(days: 7)),
-      _accounts[1],
-      _accounts[0],
-    ),
-    Transaction(
-      DateTime.now().toString(),
-      "Saldo inicial",
-      Decimal.parse("200"),
-      _today.subtract(new Duration(days: 7)),
-      _accounts[2],
-      _accounts[0],
-    ),
-    Transaction(
-      DateTime.now().toString(),
-      "Saldo inicial",
-      Decimal.parse("300"),
-      _today.subtract(new Duration(days: 7)),
-      _accounts[3],
-      _accounts[0],
-    ),
-    Transaction(
-      DateTime.now().toString(),
-      "Bom Preço",
-      Decimal.parse("67.32"),
-      _today,
-      _accounts[20],
-      _accounts[1],
-    ),
-    Transaction(
-      DateTime.now().toString(),
-      "Lavagem Carro",
-      Decimal.parse("30.00"),
-      _today.subtract(new Duration(days: 1)),
-      _accounts[18],
-      _accounts[3],
-    ),
-    Transaction(
-      DateTime.now().toString(),
-      "Bolo",
-      Decimal.parse("16.00"),
-      _today.subtract(new Duration(days: 2)),
-      _accounts[23],
-      _accounts[3],
-    ),
-    Transaction(
-      DateTime.now().toString(),
-      "Corte Cabelo",
-      Decimal.parse("15"),
-      _today.subtract(new Duration(days: 3)),
-      _accounts[32],
-      _accounts[1],
-    ),
-    Transaction(
-      DateTime.now().toString(),
-      "Presente",
-      Decimal.parse("97.3"),
-      _today.subtract(new Duration(days: 4)),
-      _accounts[28],
-      _accounts[3],
-    ),
-    Transaction(
-      DateTime.now().toString(),
-      "Remédio",
-      Decimal.parse("27.32"),
-      _today.subtract(new Duration(days: 5)),
-      _accounts[29],
-      _accounts[3],
-    ),
-    Transaction(
-      DateTime.now().toString(),
-      "IPTU",
-      Decimal.parse("81.02"),
-      _today.subtract(new Duration(days: 6)),
-      _accounts[17],
-      _accounts[2],
-    ),
-  ];
-
-  static final List<Account> _accounts = [
-    //Start balance
-    Account('a00', 'Saldo Inicial', AccountType.initialBalance),
-    //Movement
-    Account('a01', 'Dinheiro', AccountType.movement),
-    Account('a02', 'C.Corrente BB', AccountType.movement),
-    Account('a03', 'C.Corrente Nubank', AccountType.movement),
-    Account('a04', 'C.Corrente Easy', AccountType.movement),
-    //Investment
-    Account('a05', 'Poupança Nubank', AccountType.investment),
-    Account('a06', 'Invest. Easy', AccountType.investment),
-    //Loan
-    Account('a07', 'Empréstimo', AccountType.loan),
-    Account('a08', 'Juros', AccountType.loan),
-    //Credit
-    Account('a09', 'C.Créd. Saraiva', AccountType.credit),
-    Account('a10', 'C.Créd. Nubank', AccountType.credit),
-    Account('a11', 'C.Créd. Submarino', AccountType.credit),
-    Account('a12', 'C.Créd. Americanas', AccountType.credit),
-    //Asset
-    Account('a13', 'Trabalho', AccountType.asset),
-    Account('a14', 'Rendimento', AccountType.asset),
-    Account('a15', 'Doações', AccountType.asset),
-    //Loss
-    Account('a16', 'Atividade Física', AccountType.loss),
-    Account('a17', 'Casa', AccountType.loss),
-    Account('a18', 'Carro', AccountType.loss),
-    Account('a19', 'Luz', AccountType.loss),
-    Account('a20', 'Mercado', AccountType.loss),
-    Account('a21', 'Telefonia', AccountType.loss),
-    Account('a22', 'Educação', AccountType.loss),
-    Account('a23', 'Alimentação', AccountType.loss),
-    Account('a24', 'Diversão', AccountType.loss),
-    Account('a25', 'Doação', AccountType.loss),
-    Account('a26', 'Itens Pessoais', AccountType.loss),
-    Account('a27', 'Impostos', AccountType.loss),
-    Account('a28', 'Presentes', AccountType.loss),
-    Account('a29', 'Saúde', AccountType.loss),
-    Account('a30', 'Serviços gerais', AccountType.loss),
-    Account('a31', 'Transporte', AccountType.loss),
-    Account('a32', 'Vestuário', AccountType.loss),
-  ];
-
-  static final DateTime _today =
+  DateTime getToday() =>
       DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
 
+  final int _maxTransactionsToDisplay = 10;
+
   double _heightAcounts =
-      (20.0 * _accounts.where((ac) => ac.isType(AccountType.movement)).length) +
+      (20.0 * accounts.where((ac) => ac.isType(AccountType.movement)).length) +
           6;
 
   List<Transaction> get _recentTransactions {
-    return _userTransactions.where((tx) {
+    return userTransactions.where((tx) {
       return tx.getDate().isAfter(
             DateTime.now().subtract(
               Duration(days: 7),
@@ -233,7 +101,7 @@ class _MyHomePageStage extends State<MyHomePage> with WidgetsBindingObserver {
   }
 
   List<Transaction> get _lastOrderedTransactions {
-    return _userTransactions.reversed.take(_maxTransactionsToDisplay).toList();
+    return userTransactions.reversed.take(_maxTransactionsToDisplay).toList();
   }
 
   void _addNewTransaction(
@@ -247,19 +115,19 @@ class _MyHomePageStage extends State<MyHomePage> with WidgetsBindingObserver {
       DateTime.now().toString(),
       txTitle,
       txAmount,
-      chosenDate ?? _today,
+      chosenDate ?? getToday(),
       inputAccount,
       outputAccount,
     );
 
     setState(() {
-      _userTransactions.add(newTx);
+      userTransactions.add(newTx);
     });
   }
 
   void _deleteTransaction(String id) {
     setState(() {
-      _userTransactions.removeWhere((tx) {
+      userTransactions.removeWhere((tx) {
         if (tx.id == id) {
           tx.delete();
           return true;
@@ -275,7 +143,7 @@ class _MyHomePageStage extends State<MyHomePage> with WidgetsBindingObserver {
       builder: (_) {
         return GestureDetector(
           onTap: () {},
-          child: NewTransaction(_addNewTransaction, _accounts),
+          child: NewTransaction(_addNewTransaction, accounts),
           behavior: HitTestBehavior.opaque,
         );
       },
@@ -332,7 +200,7 @@ class _MyHomePageStage extends State<MyHomePage> with WidgetsBindingObserver {
               height: _heightAcounts,
               //color: Colors.amber,
               child: Column(
-                children: _accounts
+                children: accounts
                     .where((ac) => ac.isType(AccountType.movement))
                     .map((account) => Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -342,7 +210,7 @@ class _MyHomePageStage extends State<MyHomePage> with WidgetsBindingObserver {
                               style: Theme.of(context).textTheme.bodyText1,
                             ),
                             Text(
-                              account.getBalanceByDate(_today),
+                              account.getBalanceByDate(getToday()),
                               style: Theme.of(context).textTheme.bodyText1,
                             ),
                           ],
