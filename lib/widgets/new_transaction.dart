@@ -88,25 +88,36 @@ class _NewTransactionState extends State<NewTransaction> {
   Widget _scrollAccountsView(
       FixedExtentScrollController controller, bool reversed) {
     return Platform.isIOS
-        ? //TODO implements the CupertinoPicker(
-        ListWheelScrollView(
-            magnification: 1.1,
+        ? CupertinoPicker(
+            onSelectedItemChanged: null,
+            magnification: 1.2,
             useMagnifier: true,
-            itemExtent: Theme.of(context).textTheme.bodyText1.fontSize,
-            controller: controller,
-            children:
-                (reversed ? widget.accountList.reversed : widget.accountList)
-                    .map((account) => Text(account.getName()))
-                    .toList(),
+            itemExtent: 24,
+            scrollController: controller,
+            children: (reversed
+                    ? widget.accountList.reversed
+                    : widget.accountList)
+                .map(
+                  (account) => Text(
+                    account.getName(),
+                    style: TextStyle(
+                      fontSize: Theme.of(context).textTheme.bodyText1.fontSize,
+                    ),
+                  ),
+                )
+                .toList(),
           )
         : ListWheelScrollView(
-            magnification: 1.1,
+            magnification: 1.5,
             useMagnifier: true,
-            itemExtent: Theme.of(context).textTheme.bodyText1.fontSize,
+            itemExtent: 22, // TO DO test oders num
             controller: controller,
             children:
                 (reversed ? widget.accountList.reversed : widget.accountList)
-                    .map((account) => Text(account.getName()))
+                    .map((account) => Text(account.getName(),
+                        style: TextStyle(
+                          fontSize: 12,
+                        )))
                     .toList(),
           );
   }
@@ -157,24 +168,24 @@ class _NewTransactionState extends State<NewTransaction> {
                 ],
                 onSubmitted: (_) => _submitData(),
               ),
-              SizedBox(height: 30),
+              SizedBox(height: 20),
               Row(
                 verticalDirection: VerticalDirection.up,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: <Widget>[
                   ConstrainedBox(
                       constraints: BoxConstraints(
-                        maxHeight: 50.0,
+                        maxHeight: 80.0,
                         maxWidth: (MediaQuery.of(context).size.width * 0.4),
                       ),
                       child: _scrollAccountsView(_outputAccount, false)),
                   Container(
-                    padding: EdgeInsets.only(top: 5),
+                    padding: EdgeInsets.only(top: 30),
                     child: Text('  ==>  '),
                   ),
                   ConstrainedBox(
                     constraints: BoxConstraints(
-                      maxHeight: 50.0,
+                      maxHeight: 80.0,
                       maxWidth: (MediaQuery.of(context).size.width * 0.4),
                     ),
                     child: _scrollAccountsView(_inputAccount, true),
